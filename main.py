@@ -17,5 +17,7 @@ def learn_data():
     # (which coincidentally are themselves the digits 1,2,3,4,5,6,7,8,9 in order)
     results = classifier.predict(inputs[:test_size])
 
+    print(f'Accuracy: {(results == outputs[:test_size]).mean()}')
+
 if __name__ == '__main__':
     learn_data()
