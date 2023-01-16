@@ -6,7 +6,7 @@ def learn_data():
     outputs = np.genfromtxt('life_expectancy_data.csv', dtype=str, delimiter=',', skip_header=1, usecols=2) == 'Developed'
 
     # This is the neural network
-    classifier = MLPClassifier(random_state=0)
+    classifier = MLPClassifier(random_state=10)
     test_size = 240
 
     from sklearn.utils import shuffle
