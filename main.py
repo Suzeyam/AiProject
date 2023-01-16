@@ -1,18 +1,19 @@
 from sklearn.neural_network import MLPClassifier
+from sklearn.utils import shuffle
 import numpy as np
 
 def learn_data():
-    inputs = np.genfromtxt('life_expectancy_data.csv', dtype=np.float32, delimiter=',', skip_header=1, usecols=range(3,22))
-    outputs = np.genfromtxt('life_expectancy_data.csv', dtype=str, delimiter=',', skip_header=1, usecols=2) == 'Developed'
+    inputs = np.genfromtxt(
+        'life_expectancy_data.csv', dtype=np.float32, delimiter=',', skip_header=1, usecols=range(3, 22)
+    )
+    outputs = np.genfromtxt(
+        'life_expectancy_data.csv', dtype=str, delimiter=',', skip_header=1, usecols=2
+    ) == 'Developed'
 
     # This is the neural network
-    classifier = MLPClassifier(random_state=10)
+    classifier = MLPClassifier(random_state=0)
     test_size = 240
 
-    from sklearn.utils import shuffle
-    # …
-    # <beep boop beep collect the `inputs` and `outputs` arrays>
-    # …
     inputs, outputs = shuffle(inputs, outputs, random_state=10)
 
     train_inputs = inputs[test_size:]
@@ -25,12 +26,12 @@ def learn_data():
 
     # Test on ONLY the first 10 digits
     # (which coincidentally are themselves the digits 1,2,3,4,5,6,7,8,9 in order)
-    results = classifier.predict(test_inputs)
-    results2 = classifier.predict(train_inputs)
+    test_results = classifier.predict(test_inputs)
+    train_results = classifier.predict(train_inputs)
 
-    print(f'Accuracy: {(results == test_outputs).mean()}')
+    print(f'Test Accuracy: {(test_results == test_outputs).mean() * 100:.5f}')
 
-    print(f'Accuracy: {(results2 == train_outputs.mean())}')
+    print(f'Train Accuracy: {(train_results == train_outputs).mean() * 100:.5f}')
 
 if __name__ == '__main__':
     learn_data()
