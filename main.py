@@ -9,6 +9,12 @@ def learn_data():
     classifier = MLPClassifier(random_state=0)
     test_size = 240
 
+    from sklearn.utils import shuffle
+    # …
+    # <beep boop beep collect the `inputs` and `outputs` arrays>
+    # …
+    inputs, outputs = shuffle(inputs, outputs, random_state=10)
+
     train_inputs = inputs[test_size:]
     train_outputs = outputs[test_size:]
     test_inputs = inputs[:test_size]
@@ -20,8 +26,11 @@ def learn_data():
     # Test on ONLY the first 10 digits
     # (which coincidentally are themselves the digits 1,2,3,4,5,6,7,8,9 in order)
     results = classifier.predict(test_inputs)
+    results2 = classifier.predict(train_inputs)
 
     print(f'Accuracy: {(results == test_outputs).mean()}')
+
+    print(f'Accuracy: {(results2 == train_outputs.mean())}')
 
 if __name__ == '__main__':
     learn_data()
