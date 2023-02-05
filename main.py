@@ -20,17 +20,14 @@ def learn_data():
     test_outputs = outputs[:test_size]
 
     best_train_losses = []
-    best_validation_losses = []
+    best_validation_accuracies = []
     hidden_layer_sizes = [(100,) * i for i in range(1, 20)]
     for i, hls in enumerate(hidden_layer_sizes):
 
-        classifier = MLPClassifier(random_state=0, hidden_layer_sizes=hls)
+        classifier = MLPClassifier(random_state=0, hidden_layer_sizes=hls, verbose=1, early_stopping=True)
 
-        # Train on all the data AFTER the first 10 (i.e. on 1787 images)
         classifier.fit(train_inputs, train_outputs)
 
-        # Test on ONLY the first 10 digits
-        # (which coincidentally are themselves the digits 1,2,3,4,5,6,7,8,9 in order)
         test_results = classifier.predict(test_inputs)
         train_results = classifier.predict(train_inputs)
 
@@ -40,15 +37,7 @@ def learn_data():
         print(f'Train Accuracy: {(train_results == train_outputs).mean() * 100:.5f}')
         print(f'Best loss: {classifier.best_loss_}')
         best_train_losses.append(classifier.best_loss_)
-        best_validation_losses.append(classifier.validation_scores_.max())
-
-        '''
-        plt.title(f'Neural Net Loss with hidden layers: {hls}')
-        plt.plot(range(len(classifier.loss_curve_)), classifier.loss_curve_)
-        plt.xlabel('Iteration Number')
-        plt.ylabel('Loss')
-        plt.show()
-        '''
+        best_validation_accuracies.append(max(classifier.validation_scores_))
 
     plt.title('Best Losses for each number of layers')
     plt.plot(
@@ -58,7 +47,7 @@ def learn_data():
     )
     plt.plot(
         [len(e) for e in hidden_layer_sizes],
-        best_validation_losses,
+        best_validation_accuracies,
         label='Validation loss'
     )
     plt.xlabel('Number of layers trained')
